@@ -21,6 +21,7 @@ import CareCaseHubPage from './app/care-cases/[id]/hub/page';
 import PendingApprovalPage from './app/finance/pending-approval/page';
 import CostListPage from './app/finance/costs/page';
 import RemindersPage from './app/reminders/page';
+import { CostCategorySettings } from './components/settings/CostCategorySettings';
 import { ComingSoon } from './components/ComingSoon';
 import { Bell, Search, User } from 'lucide-react';
 
@@ -76,6 +77,7 @@ const App = () => {
 
       // Settings
       case 'settings': return <ComingSoon />;
+      case 'cost_categories': return <CostCategorySettings />;
       default: return <ComingSoon />;
     }
   };

@@ -668,6 +668,7 @@ export interface CostCategoryGroup {
     code: string;
     name: string;
     description: string;
+    type: 'REVENUE' | 'EXPENSE';
     displayOrder: number;
     isActive: boolean;
     isDefaultSeeded: boolean;
@@ -680,6 +681,7 @@ export interface CostCategoryItem {
     name: string;
     description: string;
     examples: string;
+    type: 'REVENUE' | 'EXPENSE';
     tenantRelatedFlag: boolean;
     isTaxDeductible: boolean;
     requiresAttachment: boolean;

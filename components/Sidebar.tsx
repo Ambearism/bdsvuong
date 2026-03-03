@@ -72,7 +72,7 @@ const MENU_ITEMS: MenuItem[] = [
   { icon: HeartHandshake, id: 'care_cases', label: 'Danh sách Vuông Care' },
   { icon: CheckCircle2, id: 'pending_approval', label: 'Duyệt dòng tiền' },
   { icon: Wallet, id: 'cost_ledger', label: 'Sổ Chi Phí' },
-  { icon: Tags, id: 'cost_categories', label: 'Danh mục Chi phí' },
+  { icon: Tags, id: 'cost_categories', label: 'Danh mục Dòng tiền' },
   { divider: true },
 
   { section: 'KHÁCH HÀNG & DỮ LIỆU LIÊN KẾT' },

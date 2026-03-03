@@ -11,11 +11,13 @@ import {
 } from 'lucide-react';
 import { cn, formatNumber } from '../../utils';
 import { CreateCareCaseModal } from '../../components/care/modals/CreateCareCaseModal';
+import { AddCashflowModal } from '../../components/finance/modals/AddCashflowModal';
 
 export default function CareCasesPage() {
     const [data, setData] = useState<CareCase[]>([]);
     const [loading, setLoading] = useState(true);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [selectedCaseForCashflow, setSelectedCaseForCashflow] = useState<CareCase | null>(null);
 
     const fetchData = () => {
         setLoading(true);
@@ -55,6 +57,14 @@ export default function CareCasesPage() {
                 onClose={() => setIsCreateModalOpen(false)}
                 onSuccess={fetchData}
             />
+
+            {selectedCaseForCashflow && (
+                <AddCashflowModal
+                    isOpen={true}
+                    onClose={() => setSelectedCaseForCashflow(null)}
+                    careCase={selectedCaseForCashflow}
+                />
+            )}
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -136,6 +146,7 @@ export default function CareCasesPage() {
                                 <th className="px-6 py-4 text-right">Phí Care thực tế</th>
                                 <th className="px-6 py-5">Tương tác cuối</th>
                                 <th className="px-6 py-5">Người phụ trách</th>
+                                <th className="px-6 py-5">Hành động</th>
                                 <th className="px-6 py-5 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.05)] w-[180px]">Trạng Thái</th>
                             </tr>
                         </thead>
@@ -176,6 +187,19 @@ export default function CareCasesPage() {
                                             </div>
                                             <span className="text-xs font-bold text-slate-800">{item.assignedTo}</span>
                                         </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="text-xs font-bold text-indigo-600 border-indigo-200 bg-indigo-50 hover:bg-indigo-100 hover:text-indigo-700"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedCaseForCashflow(item);
+                                            }}
+                                        >
+                                            <Plus size={14} className="mr-1" /> Thêm Dòng Tiền
+                                        </Button>
                                     </td>
                                     {/* Toggle at the end of row */}
                                     <td className="px-6 py-4 sticky right-0 bg-white group-hover:bg-slate-50 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.05)]" onClick={e => e.stopPropagation()}>
