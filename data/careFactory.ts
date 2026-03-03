@@ -2,35 +2,35 @@ import { CareCase, CareCaseHubData, Inspection } from '../types';
 
 let MOCK_CARE_CASES: CareCase[] = [
     {
-        id: 'CASE-2023-001', 
-        ownerId: 'cus_3', 
-        ownerName: 'Phạm Minh Cường', 
+        id: 'CASE-2023-001',
+        ownerId: 'cus_3',
+        ownerName: 'Phạm Minh Cường',
         ownerPhone: '0909090909',
-        status: 'active', 
+        status: 'active',
         riskScore: 10,
         lastContactDate: '2023-11-20T10:00:00Z',
-        assignedTo: 'Trịnh CSKH', 
+        assignedTo: 'Trịnh CSKH',
         linkedProperties: [{ id: '125', code: '#125', name: 'Nhà riêng Thái Hà' }],
         linkedLeases: [{ id: 'lease_1', code: 'HDT-23001' }],
-        createdAt: '2023-10-01T00:00:00Z', 
+        createdAt: '2023-10-01T00:00:00Z',
         updatedAt: '2023-11-25T00:00:00Z',
         careFeeMillion: 5.5
     },
     {
-        id: 'CASE-2023-002', 
-        ownerId: 'cus_2', 
-        ownerName: 'Trần Thị Bích', 
+        id: 'CASE-2023-002',
+        ownerId: 'cus_2',
+        ownerName: 'Trần Thị Bích',
         ownerPhone: '0987654321',
-        status: 'active', 
-        riskScore: 5, 
+        status: 'active',
+        riskScore: 5,
         lastContactDate: '2023-11-28T14:00:00Z',
-        assignedTo: 'Lê CSKH', 
+        assignedTo: 'Lê CSKH',
         linkedProperties: [
             { id: '123', code: '#123', name: 'CC Ocean Park' },
             { id: '124', code: '#124', name: 'LK KĐT Văn Phú' }
         ],
         linkedLeases: [{ id: 'lease_2', code: 'HDT-23002' }],
-        createdAt: '2023-11-01T00:00:00Z', 
+        createdAt: '2023-11-01T00:00:00Z',
         updatedAt: '2023-11-28T00:00:00Z',
         careFeeMillion: 3.2
     }
@@ -50,6 +50,31 @@ export const updateCareCaseStatus = async (id: string, status: 'active' | 'inact
             const idx = MOCK_CARE_CASES.findIndex(c => c.id === id);
             if (idx !== -1) {
                 MOCK_CARE_CASES[idx].status = status;
+                MOCK_CARE_CASES[idx].updatedAt = new Date().toISOString();
+            }
+            resolve();
+        }, 300);
+    });
+};
+
+export const updateCareCase = async (id: string, data: Partial<CareCase>): Promise<void> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const idx = MOCK_CARE_CASES.findIndex(c => c.id === id);
+            if (idx !== -1) {
+                MOCK_CARE_CASES[idx] = { ...MOCK_CARE_CASES[idx], ...data, updatedAt: new Date().toISOString() };
+            }
+            resolve();
+        }, 400);
+    });
+};
+
+export const updateCareFee = async (id: string, fee: number): Promise<void> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const idx = MOCK_CARE_CASES.findIndex(c => c.id === id);
+            if (idx !== -1) {
+                MOCK_CARE_CASES[idx].careFeeMillion = fee;
                 MOCK_CARE_CASES[idx].updatedAt = new Date().toISOString();
             }
             resolve();

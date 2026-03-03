@@ -24,7 +24,7 @@ export default function ArAgingReportPage() {
   const totalOutstanding = data.reduce((acc, curr) => acc + curr.totalOutstandingTy, 0);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Báo Cáo Phân Tích Tuổi Nợ (AR Aging)</h1>

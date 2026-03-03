@@ -51,7 +51,7 @@ export default function CostListPage() {
     const totalAmount = filteredData.reduce((acc, curr) => acc + curr.amountTy, 0);
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <CostEntryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={fetchData} />
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

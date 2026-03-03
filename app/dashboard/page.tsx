@@ -212,7 +212,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             ) : (
-                <div className="space-y-6">
+                <div className="space-y-8">
                      <InventoryTab data={data?.inventoryDetailed || []} filters={filters} setFilters={setFilters} isLoading={loading} />
                 </div>
             )}

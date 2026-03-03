@@ -60,7 +60,7 @@ export default function LeaseListPage() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col space-y-6">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col space-y-8">
         {/* Modals */}
         {renewLease && <RenewLeaseModal lease={renewLease} isOpen={!!renewLease} onClose={() => setRenewLease(null)} onSuccess={fetchData} />}
         {transferLease && <TransferLeaseModal lease={transferLease} isOpen={!!transferLease} onClose={() => setTransferLease(null)} onSuccess={fetchData} />}

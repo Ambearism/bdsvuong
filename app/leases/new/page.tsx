@@ -12,7 +12,7 @@ export default function NewLeasePage() {
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center gap-3">
                 <Button variant="outline" size="icon" onClick={handleBack} className="bg-white border-slate-200 text-slate-500">
                     <ChevronLeft size={20} />

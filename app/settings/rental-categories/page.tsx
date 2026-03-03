@@ -43,7 +43,7 @@ export default function RentalCategoriesPage() {
     if (loading) return <div className="p-8"><Skeleton className="h-64 w-full"/></div>;
 
     return (
-        <div className="space-y-6 pb-20 animate-in fade-in slide-in-from-right-4 duration-500">
+        <div className="space-y-8 pb-20 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-extrabold text-slate-800">Danh Mục & Loại Hình Thuê</h1>

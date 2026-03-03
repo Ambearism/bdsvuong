@@ -32,7 +32,7 @@ export default function ReminderRulesPage() {
     if (loading) return <div className="p-8"><Skeleton className="h-64 w-full"/></div>;
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 space-y-6">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 space-y-8">
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-extrabold text-slate-800">Cấu hình Tự Động Nhắc Việc (Rules Engine)</h1>

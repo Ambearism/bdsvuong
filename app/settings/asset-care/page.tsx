@@ -39,7 +39,7 @@ export default function AssetCareFeeSettingsPage() {
     if (loading || !config) return <div className="p-8"><Skeleton className="h-64 w-full rounded-2xl"/></div>;
 
     return (
-        <div className="space-y-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-8 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Cấu hình Phí Dịch Vụ Asset Care</h1>
@@ -52,12 +52,12 @@ export default function AssetCareFeeSettingsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Left: Configuration Form */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="lg:col-span-2 space-y-8">
                     <Card className="border-slate-200 shadow-sm">
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2"><Calculator size={18} className="text-indigo-600"/> Cơ sở tính phí (Fee Basis)</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <Select 
                                     label="Chu kỳ tính phí"
@@ -93,7 +93,7 @@ export default function AssetCareFeeSettingsPage() {
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2"><Percent size={18} className="text-emerald-600"/> Công thức tính (Formula)</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="space-y-8">
                             <div>
                                 <label className="text-sm font-semibold text-slate-700 block mb-3">Phương pháp tính</label>
                                 <div className="flex gap-4">
@@ -154,7 +154,7 @@ export default function AssetCareFeeSettingsPage() {
                 </div>
 
                 {/* Right: Logic Explanation */}
-                <div className="lg:col-span-1 space-y-6">
+                <div className="lg:col-span-1 space-y-8">
                     <Card className="bg-indigo-900 text-white border-none shadow-lg">
                         <CardContent className="p-6">
                             <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><AlertCircle size={20}/> Quy tắc áp dụng</h3>

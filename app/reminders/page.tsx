@@ -74,7 +74,7 @@ export default function RemindersPage() {
     };
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6 h-full flex flex-col">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8 h-full flex flex-col">
             <CreateReminderModal 
                 isOpen={isCreateModalOpen} 
                 onClose={() => setIsCreateModalOpen(false)} 

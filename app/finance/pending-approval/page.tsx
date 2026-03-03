@@ -38,7 +38,7 @@ export default function PendingApprovalPage() {
     };
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             {approveTarget && (
                 <ApproveCashflowModal 
                     entry={approveTarget} 
