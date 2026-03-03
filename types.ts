@@ -1,62 +1,83 @@
 
 export interface KPIItem {
-  id: string;
-  label: string;
-  value: number;
-  unit?: string;
-  changeValue?: string;
-  changeType?: 'positive' | 'negative' | 'neutral';
-  tooltip?: string;
+    id: string;
+    label: string;
+    value: number;
+    unit?: string;
+    changeValue?: string;
+    changeType?: 'positive' | 'negative' | 'neutral';
+    tooltip?: string;
 }
 
 export interface FunnelStage {
-  key: string;
-  label: string;
-  count: number;
-  percent: number;
-  side: 'left' | 'right';
-  color: string;
+    key: string;
+    label: string;
+    count: number;
+    percent: number;
+    side: 'left' | 'right';
+    color: string;
 }
 
 export interface LeadSource {
-  name: string;
-  value: number;
-  deals?: number;
-  color: string;
-  percent?: number;
+    name: string;
+    value: number;
+    deals?: number;
+    color: string;
+    percent?: number;
 }
 
 export interface RevenueData {
-  name: string;
-  completed: number;
-  pending: number;
-  cancelled: number;
+    name: string;
+    completed: number;
+    pending: number;
+    cancelled: number;
 }
 
 export interface InventoryCategory {
-  category: string;
-  sell: number;
-  rent: number;
+    category: string;
+    sell: number;
+    rent: number;
 }
 
 export interface InventoryDetailedItem {
-  type: string;
-  sell: { count: number; value: number; fee: number };
-  rent: { count: number; value: number; fee: number };
+    type: string;
+    sell: { count: number; value: number; fee: number };
+    rent: { count: number; value: number; fee: number };
 }
 
 export interface DashboardData {
-  kpi: KPIItem[];
-  funnel: FunnelStage[];
-  leadSources: LeadSource[];
-  revenue: RevenueData[];
-  inventory: InventoryCategory[];
-  inventoryDetailed: InventoryDetailedItem[];
+    kpi: KPIItem[];
+    funnel: FunnelStage[];
+    leadSources: LeadSource[];
+    revenue: RevenueData[];
+    inventory: InventoryCategory[];
+    inventoryDetailed: InventoryDetailedItem[];
+}
+
+// Projects
+export interface Project {
+    id: string;
+    name: string;
+    totalZones: number;
+    totalBlocks: number;
+    totalUnits: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ProjectProperty {
+    id: string;
+    projectId: string;
+    name: string;
+    unitNo: string;
+    block: string;
+    zone: string;
+    image: string;
 }
 
 // Filters
 export interface FilterState {
-  timeRange: string;
+    timeRange: string;
 }
 
 export type PropertyType = 'tat_ca' | 'chung_cu' | 'lien_ke' | 'biet_thu' | 'nha_rieng' | 'dat_nen' | 'shophouse_kiosk' | 'nghi_duong' | 'bds_khac' | 'trang_trai' | 'trang_trai_nha_vuon';
@@ -64,9 +85,9 @@ export type ItemType = 'tat_ca' | 'ban' | 'cho_thue';
 export type MetricMode = 'so_luong' | 'gia_tri' | 'phi';
 
 export interface DetailedFilterState extends FilterState {
-  propertyType: PropertyType;
-  itemType: ItemType;
-  metricMode: MetricMode;
+    propertyType: PropertyType;
+    itemType: ItemType;
+    metricMode: MetricMode;
 }
 
 // Leads
@@ -74,45 +95,45 @@ export type LeadStatus = 'lead_moi' | 'dang_cham' | 'hen_xem_nha' | 'deal_mo' | 
 export type FunnelStageKey = LeadStatus;
 
 export interface Lead {
-  id: string;
-  customerName: string;
-  phone: string;
-  need: string; // mua, thue, ky_gui_ban
-  propertyType: string;
-  area: string;
-  budgetTy: number;
-  source: string;
-  assignee: string;
-  status: LeadStatus;
-  createdAt: string;
-  updatedAt: string;
-  hasDeal?: boolean;
-  dealId?: string;
-  email?: string;
+    id: string;
+    customerName: string;
+    phone: string;
+    need: string; // mua, thue, ky_gui_ban
+    propertyType: string;
+    area: string;
+    budgetTy: number;
+    source: string;
+    assignee: string;
+    status: LeadStatus;
+    createdAt: string;
+    updatedAt: string;
+    hasDeal?: boolean;
+    dealId?: string;
+    email?: string;
 }
 
 export interface LeadFilterState {
-  search: string;
-  source: string;
-  status: string;
-  assignee: string;
-  need: string;
-  propertyType: string;
-  area: string;
-  budget: string;
-  page: number;
-  pageSize: number;
+    search: string;
+    source: string;
+    status: string;
+    assignee: string;
+    need: string;
+    propertyType: string;
+    area: string;
+    budget: string;
+    page: number;
+    pageSize: number;
 }
 
 export interface LeadDashboardData {
-  leads: Lead[];
-  totalCount: number;
-  kpi: {
-    total: number;
-    newThisWeek: number;
-    leadToDeal: number;
-    conversionRate: number;
-  };
+    leads: Lead[];
+    totalCount: number;
+    kpi: {
+        total: number;
+        newThisWeek: number;
+        leadToDeal: number;
+        conversionRate: number;
+    };
 }
 
 export interface TaskItem {
@@ -286,7 +307,7 @@ export interface CashflowEntry {
     onBehalfNote?: string;
     allocatedAmountTy: number;
     unappliedAmountTy: number;
-    attachments: {id: string, fileName: string, sizeKb?: number, url: string}[];
+    attachments: { id: string, fileName: string, sizeKb?: number, url: string }[];
     note: string;
     isTaxable: boolean;
     leaseId?: string;
@@ -636,7 +657,7 @@ export interface AssetCareFeeConfig {
 // Added Finance/Cashflow types
 export type CashflowCategory = 'RENT_INCOME' | 'ASSET_OTHER_INCOME' | 'NON_REVENUE' | 'COMPENSATION_IRREGULAR';
 
-export type CashflowSubtype = 
+export type CashflowSubtype =
     | 'RENT_MONTHLY' | 'RENT_PERIODIC' | 'RENT_ADVANCE' | 'RENT_LATE' | 'RENT_DISCOUNT'
     | 'SERVICE_FEE_TENANT' | 'UTILITY_MARKUP' | 'PENALTY_FEE' | 'CONTRACT_CHANGE_FEE' | 'EXTRA_SPACE_RENTAL' | 'REVENUE_SHARING_COOP'
     | 'SECURITY_DEPOSIT' | 'REFUND_DEPOSIT' | 'REIMBURSEMENT_PASS_THROUGH' | 'LOAN_BORROW'

@@ -7,6 +7,8 @@ import { DealList as DealListPage } from './components/DealList';
 import PropertyListPage from './app/hang-hoa/page';
 import PropertyHubPage from './app/hang-hoa/[id]/hub/page';
 import PropertyInspectionsPage from './app/properties/[id]/inspections/page';
+import ProjectListPage from './app/projects/page';
+import ProjectHubPage from './app/projects/[id]/hub/page';
 import CustomerListPage from './app/khach-hang/page';
 import CustomerHubPage from './app/khach-hang/[id]/hub/page';
 import TransactionsPage from './app/giao-dich/page';
@@ -48,6 +50,11 @@ const App = () => {
       case 'hang_hoa': return <PropertyListPage />;
       case 'property_hub': return <PropertyHubPage id={currentEntityId!} onBack={() => setCurrentRoute('hang_hoa')} />;
       case 'property_inspections': return <PropertyInspectionsPage id={currentEntityId!} params={{ id: currentEntityId! }} />;
+
+      // Projects
+      case 'projects': return <ProjectListPage />;
+      case 'project_hub': return <ProjectHubPage id={currentEntityId!} />;
+
       case 'khach_hang': return <CustomerListPage />;
       case 'customer_hub': return <CustomerHubPage id={currentEntityId!} onBack={() => setCurrentRoute('khach_hang')} />;
       case 'giao_dich': return <TransactionsPage />;
