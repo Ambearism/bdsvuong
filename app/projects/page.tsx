@@ -4,13 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Button, Input, Skeleton, TooltipWrapper } from '../../components/ui';
 import { Project } from '../../types';
 import { getProjects } from '../../data/mockProjects';
-import { Building2, Search, Plus, ExternalLink, Edit2, ArrowRight } from 'lucide-react';
+import { Building2, Search, Plus, ExternalLink, Edit2, ArrowRight, Check, X } from 'lucide-react';
 import { formatNumber } from '../../utils';
 
 export default function ProjectListPage() {
     const [data, setData] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editForm, setEditForm] = useState({ name: '', totalZones: 0, totalBlocks: 0, totalUnits: 0 });
 
     useEffect(() => {
         setLoading(true);
@@ -22,7 +24,25 @@ export default function ProjectListPage() {
 
     const handleViewHub = (id: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
+        if (editingId) return; // disable click when editing
         window.dispatchEvent(new CustomEvent('routeChange', { detail: { route: 'project_hub', id } }));
+    };
+
+    const handleEdit = (item: Project, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setEditingId(item.id);
+        setEditForm({ name: item.name, totalZones: item.totalZones, totalBlocks: item.totalBlocks, totalUnits: item.totalUnits });
+    };
+
+    const handleSave = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setData(prev => prev.map(p => p.id === id ? { ...p, ...editForm, updatedAt: new Date().toISOString() } : p));
+        setEditingId(null);
+    };
+
+    const handleCancel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setEditingId(null);
     };
 
     const filteredData = data.filter(p => p.name.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase()));
@@ -87,12 +107,30 @@ export default function ProjectListPage() {
                                 ) : filteredData.map((item) => (
                                     <tr key={item.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer" onClick={() => handleViewHub(item.id)}>
                                         <td className="px-6 py-4">
-                                            <div className="font-black text-slate-900 leading-tight">{item.name}</div>
-                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Mã: {item.id}</div>
+                                            {editingId === item.id ? (
+                                                <Input value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} className="h-8 text-sm w-[180px]" onClick={e => e.stopPropagation()} />
+                                            ) : (
+                                                <>
+                                                    <div className="font-black text-slate-900 leading-tight">{item.name}</div>
+                                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Mã: {item.id}</div>
+                                                </>
+                                            )}
                                         </td>
-                                        <td className="px-6 py-4 text-center font-bold text-indigo-600">{formatNumber(item.totalZones)}</td>
-                                        <td className="px-6 py-4 text-center font-bold text-indigo-600">{formatNumber(item.totalBlocks)}</td>
-                                        <td className="px-6 py-4 text-center font-black text-slate-800">{formatNumber(item.totalUnits)}</td>
+                                        <td className="px-6 py-4 text-center font-bold text-indigo-600">
+                                            {editingId === item.id ? (
+                                                <Input type="number" value={editForm.totalZones === 0 ? '' : editForm.totalZones} onChange={e => setEditForm({ ...editForm, totalZones: parseInt(e.target.value) || 0 })} className="h-8 text-sm w-16 mx-auto text-center" onClick={e => e.stopPropagation()} />
+                                            ) : formatNumber(item.totalZones)}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-bold text-indigo-600">
+                                            {editingId === item.id ? (
+                                                <Input type="number" value={editForm.totalBlocks === 0 ? '' : editForm.totalBlocks} onChange={e => setEditForm({ ...editForm, totalBlocks: parseInt(e.target.value) || 0 })} className="h-8 text-sm w-16 mx-auto text-center" onClick={e => e.stopPropagation()} />
+                                            ) : formatNumber(item.totalBlocks)}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-black text-slate-800">
+                                            {editingId === item.id ? (
+                                                <Input type="number" value={editForm.totalUnits === 0 ? '' : editForm.totalUnits} onChange={e => setEditForm({ ...editForm, totalUnits: parseInt(e.target.value) || 0 })} className="h-8 text-sm w-20 mx-auto text-center" onClick={e => e.stopPropagation()} />
+                                            ) : formatNumber(item.totalUnits)}
+                                        </td>
                                         <td className="px-6 py-4 text-xs text-slate-500 font-medium">
                                             {new Date(item.createdAt).toLocaleDateString('vi-VN')}
                                         </td>
@@ -101,21 +139,38 @@ export default function ProjectListPage() {
                                         </td>
                                         <td className="px-6 py-4 sticky right-0 bg-white group-hover:bg-slate-50 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.05)] text-center" onClick={e => e.stopPropagation()}>
                                             <div className="flex items-center justify-center gap-2">
-                                                <TooltipWrapper content="Chỉnh sửa">
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50">
-                                                        <Edit2 size={14} />
-                                                    </Button>
-                                                </TooltipWrapper>
-                                                <TooltipWrapper content="Xem trang Web dự án">
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50">
-                                                        <ExternalLink size={14} />
-                                                    </Button>
-                                                </TooltipWrapper>
-                                                <TooltipWrapper content="Xem danh sách bảng hàng">
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-indigo-600 bg-indigo-50 hover:bg-indigo-100" onClick={(e) => handleViewHub(item.id, e)}>
-                                                        <ArrowRight size={14} />
-                                                    </Button>
-                                                </TooltipWrapper>
+                                                {editingId === item.id ? (
+                                                    <>
+                                                        <TooltipWrapper content="Lưu thay đổi">
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-emerald-600 hover:bg-emerald-50 bg-emerald-50" onClick={(e) => handleSave(item.id, e)}>
+                                                                <Check size={14} />
+                                                            </Button>
+                                                        </TooltipWrapper>
+                                                        <TooltipWrapper content="Hủy">
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50" onClick={handleCancel}>
+                                                                <X size={14} />
+                                                            </Button>
+                                                        </TooltipWrapper>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <TooltipWrapper content="Chỉnh sửa">
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 border border-transparent" onClick={(e) => handleEdit(item, e)}>
+                                                                <Edit2 size={14} />
+                                                            </Button>
+                                                        </TooltipWrapper>
+                                                        <TooltipWrapper content="Xem trang Web dự án">
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50">
+                                                                <ExternalLink size={14} />
+                                                            </Button>
+                                                        </TooltipWrapper>
+                                                        <TooltipWrapper content="Xem danh sách bảng hàng">
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-indigo-600 bg-indigo-50 hover:bg-indigo-100" onClick={(e) => handleViewHub(item.id, e)}>
+                                                                <ArrowRight size={14} />
+                                                            </Button>
+                                                        </TooltipWrapper>
+                                                    </>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

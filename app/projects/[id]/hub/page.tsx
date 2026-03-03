@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Button, Input, Skeleton, TooltipWrapper, Select } from '../../../../components/ui';
 import { Project, ProjectProperty } from '../../../../types';
 import { getProjects, getProjectProperties } from '../../../../data/mockProjects';
-import { Building2, Search, ArrowLeft, Filter, Upload, Image as ImageIcon, ExternalLink, Edit2 } from 'lucide-react';
+import { Building2, Search, ArrowLeft, Filter, Upload, Image as ImageIcon, ExternalLink, Edit2, Check, X } from 'lucide-react';
+import { BulkUploadModal } from '../../../../components/projects/BulkUploadModal';
 
 interface Props {
     id: string;
@@ -18,6 +19,10 @@ export default function ProjectHubPage({ id }: Props) {
     const [search, setSearch] = useState('');
     const [selectedZone, setSelectedZone] = useState('tat_ca');
     const [selectedBlock, setSelectedBlock] = useState('tat_ca');
+
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editForm, setEditForm] = useState({ name: '', unitNo: '', block: '', zone: '' });
+    const [isUploadOpen, setIsUploadOpen] = useState(false);
 
     useEffect(() => {
         setLoading(true);
@@ -33,6 +38,29 @@ export default function ProjectHubPage({ id }: Props) {
 
     const handleBack = () => {
         window.dispatchEvent(new CustomEvent('routeChange', { detail: 'projects' }));
+    };
+
+    const handleEdit = (item: ProjectProperty, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setEditingId(item.id);
+        setEditForm({ name: item.name, unitNo: item.unitNo, block: item.block, zone: item.zone });
+    };
+
+    const handleSave = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setProperties(prev => prev.map(p => p.id === id ? { ...p, ...editForm } : p));
+        setEditingId(null);
+    };
+
+    const handleCancel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setEditingId(null);
+    };
+
+    const handleViewPropertyHub = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (editingId) return;
+        window.dispatchEvent(new CustomEvent('routeChange', { detail: { route: 'property_hub', id } }));
     };
 
     // Build Filter Options
@@ -106,7 +134,7 @@ export default function ProjectHubPage({ id }: Props) {
                             <Button variant="outline" className="gap-2 border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 h-11 px-4 w-full sm:w-auto">
                                 <ImageIcon size={16} /> Upload Ảnh HH
                             </Button>
-                            <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700 shadow-md h-11 px-6 w-full sm:w-auto text-white">
+                            <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700 shadow-md h-11 px-6 w-full sm:w-auto text-white" onClick={() => setIsUploadOpen(true)}>
                                 <Upload size={16} /> Upload Ảnh Hàng Loạt
                             </Button>
                         </div>
@@ -145,44 +173,79 @@ export default function ProjectHubPage({ id }: Props) {
                                     </td>
                                 </tr>
                             ) : filteredProps.map((item) => (
-                                <tr key={item.id} className="hover:bg-slate-50 transition-colors group">
+                                <tr key={item.id} className="hover:bg-slate-50 transition-colors group cursor-pointer" onClick={(e) => handleViewPropertyHub(item.id, e)}>
                                     <td className="px-6 py-4">
                                         <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm border border-slate-200 group-hover:shadow-md transition-shadow">
                                             <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="font-black text-slate-900">{item.name}</div>
-                                        <div className="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-widest">ID: {item.id}</div>
+                                        {editingId === item.id ? (
+                                            <Input value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} className="h-8 text-sm w-[160px]" onClick={e => e.stopPropagation()} />
+                                        ) : (
+                                            <>
+                                                <div className="font-black text-slate-900">{item.name}</div>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-widest">ID: {item.id}</div>
+                                            </>
+                                        )}
                                     </td>
-                                    <td className="px-6 py-4 font-bold text-slate-700">{item.unitNo}</td>
+                                    <td className="px-6 py-4 font-bold text-slate-700">
+                                        {editingId === item.id ? (
+                                            <Input value={editForm.unitNo} onChange={e => setEditForm({ ...editForm, unitNo: e.target.value })} className="h-8 text-sm w-[100px]" onClick={e => e.stopPropagation()} />
+                                        ) : item.unitNo}
+                                    </td>
                                     <td className="px-6 py-4">
-                                        <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">
-                                            {item.block}
-                                        </span>
+                                        {editingId === item.id ? (
+                                            <Input value={editForm.block} onChange={e => setEditForm({ ...editForm, block: e.target.value })} className="h-8 text-sm w-[100px]" onClick={e => e.stopPropagation()} />
+                                        ) : (
+                                            <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">
+                                                {item.block}
+                                            </span>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">
-                                            {item.zone}
-                                        </span>
+                                        {editingId === item.id ? (
+                                            <Input value={editForm.zone} onChange={e => setEditForm({ ...editForm, zone: e.target.value })} className="h-8 text-sm w-[100px]" onClick={e => e.stopPropagation()} />
+                                        ) : (
+                                            <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold border border-slate-200">
+                                                {item.zone}
+                                            </span>
+                                        )}
                                     </td>
-                                    <td className="px-6 py-4 sticky right-0 bg-white group-hover:bg-slate-50 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.05)] text-center">
+                                    <td className="px-6 py-4 sticky right-0 bg-white group-hover:bg-slate-50 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.05)] text-center" onClick={e => e.stopPropagation()}>
                                         <div className="flex items-center justify-center gap-2">
-                                            <TooltipWrapper content="Chỉnh sửa chi tiết">
-                                                <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">
-                                                    <Edit2 size={16} />
-                                                </Button>
-                                            </TooltipWrapper>
-                                            <TooltipWrapper content="Xem Ảnh Lớn">
-                                                <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg">
-                                                    <ImageIcon size={16} />
-                                                </Button>
-                                            </TooltipWrapper>
-                                            <TooltipWrapper content="Xem trên web">
-                                                <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
-                                                    <ExternalLink size={16} />
-                                                </Button>
-                                            </TooltipWrapper>
+                                            {editingId === item.id ? (
+                                                <>
+                                                    <TooltipWrapper content="Lưu thay đổi">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-emerald-600 hover:bg-emerald-50 bg-emerald-50" onClick={(e) => handleSave(item.id, e)}>
+                                                            <Check size={14} />
+                                                        </Button>
+                                                    </TooltipWrapper>
+                                                    <TooltipWrapper content="Hủy">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-rose-500 hover:bg-rose-50" onClick={handleCancel}>
+                                                            <X size={14} />
+                                                        </Button>
+                                                    </TooltipWrapper>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <TooltipWrapper content="Chỉnh sửa chi tiết">
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg" onClick={(e) => handleEdit(item, e)}>
+                                                            <Edit2 size={16} />
+                                                        </Button>
+                                                    </TooltipWrapper>
+                                                    <TooltipWrapper content="Xem Ảnh Lớn">
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg">
+                                                            <ImageIcon size={16} />
+                                                        </Button>
+                                                    </TooltipWrapper>
+                                                    <TooltipWrapper content="Xem trên web">
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg">
+                                                            <ExternalLink size={16} />
+                                                        </Button>
+                                                    </TooltipWrapper>
+                                                </>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
@@ -191,6 +254,12 @@ export default function ProjectHubPage({ id }: Props) {
                     </table>
                 </div>
             </Card>
+
+            <BulkUploadModal
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                onSuccess={() => setIsUploadOpen(false)}
+            />
         </div>
     );
 }
