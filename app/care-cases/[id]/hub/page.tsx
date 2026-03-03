@@ -10,13 +10,16 @@ import {
     ChevronLeft, Plus, MessageSquare, CheckSquare,
     Link, Paperclip, History, User, Phone, Mail,
     Calendar, AlertTriangle, Send, Zap, PieChart,
-    Building2, FileText, Clock, ArrowRight
+    Building2, FileText, Clock, ArrowRight, DollarSign
 } from 'lucide-react';
 import { CareFinancialTab } from '../../../../components/care/tabs/CareFinancialTab';
 import { PerformanceReportTab } from '../../../../components/care/tabs/PerformanceReportTab';
 import { CareTaxTab } from '../../../../components/care/tabs/CareTaxTab';
 import { EditCareCaseModal } from '../../../../components/care/modals/EditCareCaseModal';
 import { AdjustCareFeeModal } from '../../../../components/care/modals/AdjustCareFeeModal';
+import { SummaryReportModal } from '../../../../components/care/modals/SummaryReportModal';
+import { AddCashflowModal } from '../../../../components/finance/modals/AddCashflowModal';
+
 export default function CareCaseHubPage({ params, id }: { params?: { id: string }, id?: string }) {
     const caseId = id || params?.id;
     const [data, setData] = useState<CareCaseHubData | null>(null);
@@ -25,6 +28,8 @@ export default function CareCaseHubPage({ params, id }: { params?: { id: string 
     const [logContent, setLogContent] = useState('');
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isAdjustFeeModalOpen, setIsAdjustFeeModalOpen] = useState(false);
+    const [isSummaryReportOpen, setIsSummaryReportOpen] = useState(false);
+    const [isAddCashflowOpen, setIsAddCashflowOpen] = useState(false);
 
     const fetchData = () => {
         if (caseId) {
@@ -82,7 +87,8 @@ export default function CareCaseHubPage({ params, id }: { params?: { id: string 
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" className="bg-white font-bold border-slate-200">Báo cáo tổng hợp</Button>
+                    <Button variant="outline" className="bg-white font-bold border-slate-200" onClick={() => setIsSummaryReportOpen(true)}>Báo cáo tổng hợp</Button>
+                    <Button variant="outline" className="bg-white font-bold border-indigo-200 text-indigo-700 hover:bg-indigo-50" onClick={() => setIsAddCashflowOpen(true)}><DollarSign size={16} className="mr-2" /> Thêm Dòng Tiền</Button>
                     <Button className="gap-2 shadow-lg shadow-indigo-100 font-bold bg-indigo-600" onClick={() => setIsEditModalOpen(true)}><Zap size={18} /> Chỉnh sửa Case</Button>
                 </div>
             </div>
@@ -302,6 +308,16 @@ export default function CareCaseHubPage({ params, id }: { params?: { id: string 
                             toast('Đã cập nhật mức phí Care');
                             fetchData();
                         }}
+                    />
+                    <SummaryReportModal
+                        isOpen={isSummaryReportOpen}
+                        onClose={() => setIsSummaryReportOpen(false)}
+                        careCase={c}
+                    />
+                    <AddCashflowModal
+                        isOpen={isAddCashflowOpen}
+                        onClose={() => setIsAddCashflowOpen(false)}
+                        careCase={c}
                     />
                 </>
             )}

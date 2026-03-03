@@ -6,6 +6,7 @@ import { Project } from '../../types';
 import { getProjects } from '../../data/mockProjects';
 import { Building2, Search, Plus, ExternalLink, Edit2, ArrowRight, Check, X } from 'lucide-react';
 import { formatNumber } from '../../utils';
+import { ProjectHubDrawer } from '../../components/projects/ProjectHubDrawer';
 
 export default function ProjectListPage() {
     const [data, setData] = useState<Project[]>([]);
@@ -13,6 +14,7 @@ export default function ProjectListPage() {
     const [search, setSearch] = useState('');
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editForm, setEditForm] = useState({ name: '', totalZones: 0, totalBlocks: 0, totalUnits: 0 });
+    const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -25,7 +27,7 @@ export default function ProjectListPage() {
     const handleViewHub = (id: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
         if (editingId) return; // disable click when editing
-        window.dispatchEvent(new CustomEvent('routeChange', { detail: { route: 'project_hub', id } }));
+        setSelectedProjectId(id);
     };
 
     const handleEdit = (item: Project, e: React.MouseEvent) => {
@@ -180,6 +182,11 @@ export default function ProjectListPage() {
                     </div>
                 </CardContent>
             </Card>
+
+            <ProjectHubDrawer
+                projectId={selectedProjectId}
+                onClose={() => setSelectedProjectId(null)}
+            />
         </div>
     );
 }

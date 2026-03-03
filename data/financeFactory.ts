@@ -9,7 +9,7 @@ let PENDING_CASHFLOWS: CashflowEntry[] = [
         method: 'bank_transfer', payer: 'Nguyễn Văn An', type: 'RENT', status: 'PENDING',
         createdBy: 'Trịnh Trung Hiếu', createdAt: '2023-11-29T10:05:00Z', isEnteredOnBehalf: true, onBehalfNote: 'Khách gửi ảnh UNC qua Zalo',
         allocatedAmountTy: 0, unappliedAmountTy: 0.015,
-        attachments: [{id:'att1', fileName:'UNC_T11.jpg', sizeKb: 250, url: '#'}], note: 'Thanh toán tiền nhà T11',
+        attachments: [{ id: 'att1', fileName: 'UNC_T11.jpg', sizeKb: 250, url: '#' }], note: 'Thanh toán tiền nhà T11',
         isTaxable: true
     },
     {
@@ -42,8 +42,18 @@ export const getPendingCashflows = async (): Promise<CashflowEntry[]> => {
     return new Promise(resolve => setTimeout(() => resolve([...PENDING_CASHFLOWS]), 400));
 };
 
+export const createPendingCashflow = async (entry: CashflowEntry): Promise<void> => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            PENDING_CASHFLOWS.unshift(entry);
+            console.log(`[Finance] Created pending cashflow ${entry.id}`);
+            resolve();
+        }, 500);
+    });
+};
+
 export const getAssetCareFeeConfig = async (): Promise<AssetCareFeeConfig> => {
-    return new Promise(resolve => setTimeout(() => resolve({...FEE_CONFIG}), 400));
+    return new Promise(resolve => setTimeout(() => resolve({ ...FEE_CONFIG }), 400));
 };
 
 export const saveAssetCareFeeConfig = async (newConfig: AssetCareFeeConfig): Promise<void> => {
@@ -60,9 +70,9 @@ export const approveCashflow = async (id: string, data: { revenueCode: string, i
         setTimeout(() => {
             const idx = PENDING_CASHFLOWS.findIndex(c => c.id === id);
             if (idx === -1) return reject("Entry not found");
-            
+
             const entry = PENDING_CASHFLOWS[idx];
-            
+
             // Mock Rule: Creator cannot approve
             if (entry.createdBy === approverName) {
                 return reject("Vi phạm quy tắc: Người nhập không được tự duyệt dòng tiền.");
@@ -70,7 +80,7 @@ export const approveCashflow = async (id: string, data: { revenueCode: string, i
 
             // Move to Approved (Mock: remove from pending list)
             PENDING_CASHFLOWS.splice(idx, 1);
-            
+
             console.log(`[Finance] Approved ${id} by ${approverName} with code ${data.revenueCode}`);
             resolve();
         }, 800);
@@ -83,7 +93,7 @@ export const rejectCashflow = async (id: string, reason: string, rejectorName: s
             const idx = PENDING_CASHFLOWS.findIndex(c => c.id === id);
             if (idx !== -1) {
                 // In real app: Update status to REJECTED, don't delete
-                PENDING_CASHFLOWS.splice(idx, 1); 
+                PENDING_CASHFLOWS.splice(idx, 1);
                 console.log(`[Finance] Rejected ${id} by ${rejectorName}: ${reason}`);
             }
             resolve();
