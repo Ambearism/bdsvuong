@@ -19,6 +19,7 @@ import CareCaseHubPage from './app/care-cases/[id]/hub/page';
 import PendingApprovalPage from './app/finance/pending-approval/page';
 import CostListPage from './app/finance/costs/page';
 import RemindersPage from './app/reminders/page';
+import { ComingSoon } from './components/ComingSoon';
 import { Bell, Search, User } from 'lucide-react';
 
 const App = () => {
@@ -67,8 +68,8 @@ const App = () => {
       case 'cost_ledger': return <CostListPage />;
 
       // Settings
-      case 'settings': return <DashboardPage />;
-      default: return <DashboardPage />;
+      case 'settings': return <ComingSoon />;
+      default: return <ComingSoon />;
     }
   };
 
