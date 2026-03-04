@@ -10,8 +10,16 @@ let MOCK_CARE_CASES: CareCase[] = [
         riskScore: 10,
         lastContactDate: '2023-11-20T10:00:00Z',
         assignedTo: 'Trịnh CSKH',
-        linkedProperties: [{ id: '125', code: '#125', name: 'Nhà riêng Thái Hà' }],
-        linkedLeases: [{ id: 'lease_1', code: 'HDT-23001' }],
+        linkedProperties: [
+            { id: '125', code: '#125', name: 'Nhà riêng Thái Hà' },
+            { id: '126', code: '#126', name: 'Biệt thự Ecopark Vườn Tùng' },
+            { id: '127', code: '#127', name: 'Shophouse KĐT Dương Nội' }
+        ],
+        linkedLeases: [
+            { id: 'lease_1', code: 'HDT-23001' },
+            { id: 'lease_4', code: 'HDT-23004' },
+            { id: 'lease_5', code: 'HDT-23005' }
+        ],
         createdAt: '2023-10-01T00:00:00Z',
         updatedAt: '2023-11-25T00:00:00Z',
         careFeeMillion: 5.5
@@ -87,9 +95,12 @@ export const getCareCaseHub = async (id: string): Promise<CareCaseHubData | null
     const c = cases.find(item => item.id === id);
     if (!c) return null;
 
-    // Mock data based on business logic
+    // Calculate aggregated stats from linked leases. For simplicity, we'll mock the calculated connection values here based on the known links.
+    // If it's CASE-2023-001, we know it has leases 1, 4, 5 (15tr + 35tr + 25tr = 75tr total rent) -> Tax = 7.5tr = 0.0075 Ty
+    const aggregatedTax = c.id === 'CASE-2023-001' ? 0.0075 : 0.0008;
+
     return {
-        case: c,
+        case: { ...c, taxLiabilityTy: aggregatedTax } as any,
         stats: { openTasks: 3, overdueTasks: 1, totalLogs: 12 },
         tasks: [
             { id: 't1', title: 'Sửa vòi nước tầng 2', dueDate: '2023-12-05', priority: 'high', status: 'in_progress', assignee: 'Trịnh CSKH', linkedEntity: '#125' },
@@ -106,9 +117,6 @@ export const createCareCase = async (newCase: CareCase): Promise<void> => {
     MOCK_CARE_CASES.unshift(newCase);
 };
 
-/**
- * Fix: Added missing getInspections export to satisfy app/properties/[id]/inspections/page.tsx
- */
 export const getInspections = async (propertyId: string): Promise<Inspection[]> => {
     return new Promise((resolve) => {
         setTimeout(() => {
