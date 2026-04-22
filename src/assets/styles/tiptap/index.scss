@@ -1,0 +1,25 @@
+ul {
+    li {
+        p {
+            @apply my-0;
+        }
+    }
+}
+ul[data-type='taskList'] {
+    @apply ps-2 list-none;
+    li {
+        @apply flex items-start;
+
+        &:not(:has(> p:first-child)) {
+            @apply list-none;
+        }
+
+        label {
+            @apply relative pr-4;
+        }
+
+        div {
+            @apply flex-1 min-w-0;
+        }
+    }
+}

@@ -1,0 +1,8 @@
+services:
+    bdsv-admin-staging:
+        build:
+            context: ../../
+            dockerfile: docker/staging/Dockerfile
+        image: bdsv-admin-staging
+        ports:
+            - '80:80'

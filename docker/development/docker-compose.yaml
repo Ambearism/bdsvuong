@@ -1,0 +1,8 @@
+services:
+    bdsv-admin-development:
+        build:
+            context: ../../
+            dockerfile: docker/development/Dockerfile
+        image: bdsv-admin-development
+        ports:
+            - '80:80'

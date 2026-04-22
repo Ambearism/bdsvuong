@@ -1,0 +1,21 @@
+name: Deploy Development
+on:
+    push:
+        branches: [develop]
+jobs:
+    deploy-development:
+        uses: ./.github/workflows/deploy-common.yml
+        with:
+            GCP_PROJECT_ID: '${{ vars.DEV_GCP_PROJECT_ID }}'
+            GKE_CLUSTER: '${{ vars.DEV_GKE_CLUSTER }}'
+            GKE_ZONE: '${{ vars.DEV_GKE_ZONE }}'
+            REGISTRY: '${{ vars.DEV_REGISTRY }}'
+            REGISTRY_REPO_NAME: 'bdsv-admin'
+            DEPLOYMENT_NAME: 'bdsv-admin'
+            CONTAINER_NAME: 'bdsv-admin'
+            DOCKER_FILE: './docker/staging/Dockerfile'
+            NAMESPACE: 'bds'
+            DOCKER_ENV_FILE_NAME: '.env.staging.example'
+        secrets:
+            GCLOUD_AUTH: '${{ secrets.DEV_GCLOUD_AUTH }}'
+            ENV_FILE: '${{ secrets.DEV_ENV_FILE }}'

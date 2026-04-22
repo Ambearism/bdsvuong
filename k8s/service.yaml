@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: bdsv-admin
+    namespace: bds
+spec:
+    type: ClusterIP
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 80
+    selector:
+        app: bdsv-admin

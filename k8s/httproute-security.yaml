@@ -1,0 +1,21 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+    name: admin-bds-secure
+    namespace: bds
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: default
+          sectionName: websecure
+    hostnames:
+        - admin-bds.hexigon.tech
+    rules:
+        - matches:
+              - path:
+                    type: PathPrefix
+                    value: /
+          backendRefs:
+              - name: bdsv-admin
+                namespace: bds
+                port: 80
